@@ -1,4 +1,6 @@
-
+.library{
+    height: 88vh;
+}
 .mainSection{
     display: flex;
     flex-wrap: wrap;
@@ -13,7 +15,6 @@
     height: 210px;
     display: flex;
     align-items: center;
-    cursor: pointer;
 
     
     .images{

@@ -1,0 +1,22 @@
+.searchContainer{
+    width: 290px;
+    height: 40px;
+    position: relative;
+    .Search_Input{
+        border: none;
+        border-radius: 20px;
+        padding: 10px;
+        outline: 0;
+        font-size: 18px;
+        width: 290px;
+        height: 40px;
+    
+    }
+    
+    .search_icon{
+        position: absolute;
+        right: 12px;
+        top: 7px;
+        cursor: pointer;
+    }
+}

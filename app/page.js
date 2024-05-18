@@ -1,95 +1,136 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import { useEffect, useState } from "react";
+import styles from "./page.module.css";
+import Loading from "./components/Loading/Loading";
+import MusicPlayer from "./components/Music/MusicPlayer";
+import useUser from "./customHook/useUser";
 
 export default function Home() {
+  const [musicList, setMusicList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [favSongList, setFavSongList] = useState([]);
+
+  const [selectedMusic, setSelectedMusic] = useState({
+    _id: "",
+    title: "",
+    audio_url: "",
+    thumbnail: "",
+    artist: "",
+  });
+
+  const isFavSong = favSongList?.filter((item) => item._id === selectedMusic._id).length;
+
+
+  console.log(selectedMusic, "selectedMusic");
+
+  const { getToken } = useUser();
+
+  useEffect(() => {
+    async function fetchSongs() {
+      setIsLoading(true);
+      const url = "https://academics.newtonschool.co/api/v1/music/song";
+      const myHeaders = new Headers();
+      myHeaders.append("projectID", "69wrdjpfsdpk");
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      const response = await fetch(url, requestOptions);
+      const result = await response.json();
+      const data = result.data;
+
+      setMusicList(data);
+      setIsLoading(false);
+      console.log(data, "New Data");
+    }
+
+    try {
+      fetchSongs();
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    async function getListOfFavoSong() {
+      const url =
+        "https://academics.newtonschool.co/api/v1/music/favorites/like";
+
+      const myHeaders = new Headers();
+      myHeaders.append("projectID", "69wrdjpfsdpk");
+      myHeaders.append("Authorization", `Bearer ${getToken}`);
+      myHeaders.append("Content-Type", "application/json");
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      const songs = data?.data?.songs;
+
+      setFavSongList(songs);
+    }
+
+    getListOfFavoSong();
+  }, []);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <section className={styles.mainSection}>
+          {musicList.map((music) => {
+            const { _id, title, audio_url, thumbnail, artist } = music;
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+            return (
+              <>
+                <div key={_id} className={styles.cardContainer}>
+                  <div
+                    onClick={(e) => {
+                      setSelectedMusic({
+                        _id,
+                        title,
+                        audio_url,
+                        thumbnail,
+                        artist,
+                      });
+                    }}
+                  >
+                    <div className={styles.images}>
+                      <img
+                        className={styles.image}
+                        src={thumbnail}
+                        alt={"thumbnail"}
+                      />
+                    </div>
+                    <div className={styles.detailes}>
+                      <h4>{title}</h4>
+                      <p style={{ color: "#a8a3a3" }}>{artist.name}</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })}
+        </section>
+      )}
+
+      {selectedMusic &&  (
+        <MusicPlayer
+          title={selectedMusic.title}
+          _id={selectedMusic._id}
+          audio_url={selectedMusic.audio_url}
+          thumbnail={selectedMusic.thumbnail}
+          isFav={!isFavSong}
         />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+      )}
+    </>
+  );
 }
