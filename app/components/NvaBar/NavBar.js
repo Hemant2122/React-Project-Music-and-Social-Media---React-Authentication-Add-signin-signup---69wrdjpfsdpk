@@ -4,10 +4,10 @@ import React, { useContext } from 'react'
 import Logo from '../Logo/Logo'
 import SearchInput from '../Search_Input/Search_Input'
 import styles from "./NvaBar.module.css";
-import Image from 'next/image';
-import profile_icon from "../../assets/icon/profile.svg";
+import Profile from '@/app/profile/Profile';
 
 function NavBar() {
+  
 
   return (
     <div>
@@ -26,13 +26,11 @@ function NavBar() {
                 <Link href={"/library"} >Library</Link>
             </li>
         </ul>
-        <ul>
+        <ul className={styles.search}>
             <SearchInput />
         </ul>
         <ul>
-            <Link href={"/profile"} >
-                <Image height={40} width={40} src={profile_icon} alt='profile_icon' priority={true} />
-            </Link>
+            <Profile />
         </ul>
       </nav>
     </div>

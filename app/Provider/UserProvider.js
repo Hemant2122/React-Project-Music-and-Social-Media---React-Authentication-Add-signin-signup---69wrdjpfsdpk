@@ -7,7 +7,10 @@ export const UserContext = React.createContext({
     getName: "",
     nameHandler: () => {},
     tokenHandler: () => {},
-    logout: () => {},
+    logout: () => {
+        sessionStorage.clear();
+        location.reload();
+    },
 });
 
 

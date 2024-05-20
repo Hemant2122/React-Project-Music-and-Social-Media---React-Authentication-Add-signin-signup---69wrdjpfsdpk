@@ -6,4 +6,4 @@ function useUser() {
   return useContext(UserContext);
 }
 
-export default useUser
+export default useUser;

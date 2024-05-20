@@ -22,3 +22,14 @@
     text-decoration: none;
     color: #FFF;
 }
+
+@media only screen and (max-width: 1020px) {
+    .linkBar{
+        display: none;
+    }
+
+    .search{
+        display: none;
+    }
+}
+

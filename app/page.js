@@ -9,14 +9,8 @@ export default function Home() {
   const [musicList, setMusicList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [favSongList, setFavSongList] = useState([]);
-
-  const [selectedMusic, setSelectedMusic] = useState({
-    _id: "",
-    title: "",
-    audio_url: "",
-    thumbnail: "",
-    artist: "",
-  });
+  const [selectedMusic, setSelectedMusic] = useState({});
+  const [getMusic, setMusic] = useState(false);
 
   const isFavSong = favSongList?.filter((item) => item._id === selectedMusic._id).length;
 
@@ -53,6 +47,8 @@ export default function Home() {
       console.error(error);
     }
   }, []);
+
+  
 
   useEffect(() => {
     async function getListOfFavoSong() {
@@ -94,6 +90,7 @@ export default function Home() {
                 <div key={_id} className={styles.cardContainer}>
                   <div
                     onClick={(e) => {
+                      setMusic(true);
                       setSelectedMusic({
                         _id,
                         title,
@@ -122,7 +119,7 @@ export default function Home() {
         </section>
       )}
 
-      {selectedMusic &&  (
+      {getMusic && (
         <MusicPlayer
           title={selectedMusic.title}
           _id={selectedMusic._id}

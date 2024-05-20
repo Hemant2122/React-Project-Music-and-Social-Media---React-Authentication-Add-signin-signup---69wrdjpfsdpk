@@ -19,6 +19,9 @@ function login() {
     password: "",
   });
 
+  const [token] = useState(sessionStorage.getItem("token"))
+  const [login] = useState(token);
+
 
 
   function submitForm(){
@@ -45,16 +48,18 @@ function login() {
       const response = await fetch(url, requestOptions);
       const data = await response.json();
       const token = data?.token;
-      const name = data?.data.user.name
+      const name = data?.data?.user.name
 
       tokenHandler(token);
       nameHandler(name);
 
-      console.log(data, "login data");
+      console.log(data?.message, "login data");
 
     }
 
+    
     callAPI();
+    
     router.push("/");
   }
   
@@ -67,23 +72,40 @@ function login() {
         [key]: val,
       }
     })
+  };
+
+
+  function submitHandler(e){
+    e.preventDefault();
+
+    if(loginState.email === "" && loginState.password === ""){
+      setError("The email and password is required !");
+    }else if(loginState.email === ""){
+      setError("The email is required !");
+    }else if(loginState.password === ""){
+      setError("The password is required !");
+    }else{
+      submitForm();
+
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+    }
+
   }
 
 
   return (
     <div className={styles.signupContainer}>
       <h1 className={styles.formName}>Login</h1>
-
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        submitForm();
-        console.log("get there State", loginState);
-      }} className={styles.signupForm}>
+      <h3 style={{color: "red"}}>{error}</h3>
+      <form onSubmit={submitHandler} className={styles.signupForm}>
         <div className={styles.containerDiv}>
           <label htmlFor="exampleInputEmail1" className={styles.labelSize}>Email</label>
           <br/>
           <input onChange={(e) => {
               formHandler(e, "email");
+              setError("")
           }}  type="email" className={styles.inputSize} id="exampleInputEmail1" aria-describedby="emailHelp" />
         </div>
         <div className={styles.containerDiv}>
@@ -91,13 +113,14 @@ function login() {
           <br/>
           <input onChange={(e) => {
               formHandler(e, "password");
+              setError("");
           }} type="password" className={styles.inputSize} id="exampleInputPassword1" />
         </div>
         <button type="submit" className={styles.buttonSubmit}>Login</button>
       </form>
 
       <div className={styles.alreadyExit}>
-        <p>Dont`t` have an account?</p>
+        <p>Dont`t have an account?</p>
         <input type='submit' value={"SignUp here!"} onClick={() => {
           router.push("/signup");
         }} />
