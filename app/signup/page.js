@@ -40,7 +40,7 @@ function signup() {
       const response = await fetch(url, requestOptions);
       const data = response.json();
       // const message = data?.Promise?.;
-      // console.log(data, "sign Up Form");
+      console.log(data, "sign Up Form");
 
     }catch (error) {
       setError(error);
@@ -58,18 +58,33 @@ function signup() {
         [key]: val,
       }
     })
+  };
+
+
+  function submitSingUpHandler(e){
+    e.preventDefault();
+    signUpForm();
+
+    if(signupState.name === "" && signupState.email === "" && signupState.password === ""){
+      setError("The name, email and password is required !");
+    }else if(signupState.name === ""){
+      setError("The name is required !");
+    }else if(signupState.email === ""){
+      setError("The email is required !");
+    }else if(signupState.password === ""){
+      setError("The password is required !");
+    }else{
+      signUpForm();
+    }
+    console.log(signupState, "sign Up State");
   }
 
   return (
     <div className={styles.signupContainer}>
       <h1 className={styles.formName}>Sign Up</h1>
       <h3 className={styles.error}>{error}</h3>
-      <form className={styles.signupForm} onSubmit={(e) => {
-        e.preventDefault();
-        signUpForm();
-        // {!error && router.push("/login");}
-        console.log(signupState, "sign Up State");
-      }}>
+
+      <form className={styles.signupForm} onSubmit={submitSingUpHandler}>
       <div className={styles.containerDiv} >
           <label htmlFor="exampleInputName" className={styles.labelSize}>Name</label>
           <br/>

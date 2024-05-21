@@ -19,8 +19,8 @@ function login() {
     password: "",
   });
 
-  const [token] = useState(sessionStorage.getItem("token"))
-  const [login] = useState(token);
+  // const [token] = useState(sessionStorage.getItem("token"))
+  // const [login] = useState(token);
 
 
 
@@ -75,7 +75,7 @@ function login() {
   };
 
 
-  function submitHandler(e){
+  function submitLoginHandler(e){
     e.preventDefault();
 
     if(loginState.email === "" && loginState.password === ""){
@@ -99,7 +99,8 @@ function login() {
     <div className={styles.signupContainer}>
       <h1 className={styles.formName}>Login</h1>
       <h3 style={{color: "red"}}>{error}</h3>
-      <form onSubmit={submitHandler} className={styles.signupForm}>
+      
+      <form onSubmit={submitLoginHandler} className={styles.signupForm}>
         <div className={styles.containerDiv}>
           <label htmlFor="exampleInputEmail1" className={styles.labelSize}>Email</label>
           <br/>
