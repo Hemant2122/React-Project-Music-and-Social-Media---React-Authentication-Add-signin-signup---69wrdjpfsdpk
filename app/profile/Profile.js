@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import useUser from '../customHook/useUser'
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -14,8 +14,12 @@ function Profile() {
   console.log(getToken, "getToken");
   const router = useRouter();
 
-  const [name] = useState(sessionStorage.getItem("name"));
-  const [token] = useState(sessionStorage.getItem("token"));
+  const [name, setName] = useState('');
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    setName(sessionStorage.getItem("name"));
+    setToken(sessionStorage.getItem("token"));
+  }, [])
   const [show, setShow] = useState(false);
 
 

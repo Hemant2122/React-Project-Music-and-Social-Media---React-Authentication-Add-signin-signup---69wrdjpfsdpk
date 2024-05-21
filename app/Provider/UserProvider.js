@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const UserContext = React.createContext({
 
@@ -15,8 +15,13 @@ export const UserContext = React.createContext({
 
 
 const UserProvider = (props) => {
-    const [getName, setName] = useState(sessionStorage.getItem("name"));
-    const [getToken, setToken] = useState(sessionStorage.getItem("token"));
+    const [getName, setName] = useState('');
+    const [getToken, setToken] = useState('');
+
+    useEffect(() => {
+        setName(sessionStorage.getItem("name"));
+        setToken(sessionStorage.getItem("token"));
+    }, [])
 
     console.log(getName, getToken, "User Provider logs");
 
