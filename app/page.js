@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import Loading from "./components/Loading/Loading";
 import MusicPlayer from "./components/Music/MusicPlayer";
 import useUser from "./customHook/useUser";
+import Search_Input from "./components/Search_Input/Search_Input";
 
 export default function Home() {
   const [musicList, setMusicList] = useState([]);
@@ -11,6 +12,7 @@ export default function Home() {
   const [favSongList, setFavSongList] = useState([]);
   const [selectedMusic, setSelectedMusic] = useState({});
   const [getMusic, setMusic] = useState(false);
+  const [filteredMusicList, setFilteredMusicList] = useState([]);
 
   const isFavSong = favSongList?.filter((item) => item._id === selectedMusic._id).length;
 
@@ -82,7 +84,8 @@ export default function Home() {
         <Loading />
       ) : (
         <section className={styles.mainSection}>
-          {musicList.map((music) => {
+          <Search_Input setFilteredMusicList={setFilteredMusicList} musicList={musicList} />
+          {filteredMusicList.map((music) => {
             const { _id, title, audio_url, thumbnail, artist } = music;
 
             return (

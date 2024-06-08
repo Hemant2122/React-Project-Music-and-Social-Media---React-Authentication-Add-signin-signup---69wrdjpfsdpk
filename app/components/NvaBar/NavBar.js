@@ -27,7 +27,7 @@ function NavBar() {
             </li>
         </ul>
         <ul className={styles.search}>
-            <SearchInput />
+            {/* <SearchInput /> */}
         </ul>
         <ul>
             <Profile />
